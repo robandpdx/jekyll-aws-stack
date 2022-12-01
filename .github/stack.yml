@@ -4,15 +4,17 @@ name: Jekyll AWS website
 description: Deploy a Jekyll website to AWS
 
 branding:
-  icon: 'package'
+  icon: 'layout'
   color: 'green'
 
 inputs:
   - name: AWS_ACCESS_KEY_ID
     description: aws access key id
+    is-secret: true
 
   - name: AWS_SECRET_ACCESS_KEY
     description: aws secret access key
+    is-secret: true
 
   - name: DOMAIN_NAME
     description: domain name of the website

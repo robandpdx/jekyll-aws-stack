@@ -6,9 +6,11 @@ on:
       AWS_ACCESS_KEY_ID:
         required: true
         description: aws access key id
+        is-secret: true
       AWS_SECRET_ACCESS_KEY:
         required: true
         description: aws secret access key
+        is-secret: true
       DOMAIN_NAME:
         required: true
         description: domain name of the website
