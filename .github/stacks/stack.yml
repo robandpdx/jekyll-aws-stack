@@ -41,17 +41,13 @@ configs:
         value: ${{inputs.HOST_NAME}}
       - name: HOSTED_ZONE_ID
         value: ${{inputs.HOSTED_ZONE_ID}}
-      
-branches:
-  - name: main
-    parameters:
-      enforce-admins: true
-      required-pull-request-reviews:
-        dismiss-stal-reviews: true
-        required-approving-review-count: 1
-
-environments:
-  - name: production
+  branches:
+    - name: main
+      parameters:
+        enforce-admins: true
+        required-pull-request-reviews:
+          dismiss-stal-reviews: true
+          required-approving-review-count: 1
 
 init:
   uses: "stack-init.yaml"
