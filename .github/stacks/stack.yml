@@ -46,8 +46,8 @@ configs:
       parameters:
         enforce-admins: true
         required-pull-request-reviews:
-          dismiss-stal-reviews: true
+          dismiss-stale-reviews: true
           required-approving-review-count: 1
 
 init:
-  uses: "stack-init.yaml"
+  uses: stack-init.yaml
