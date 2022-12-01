@@ -1,5 +1,7 @@
 # jekyll-aws-stack
 
+[![Use this stack](https://github.com/stack-instance/badge.svg)](https://github.com/stack-instance?stack_template_owner=robandpdx&stack_template_repo=jekyll-aws-stack)
+
 ## Why should you use this stack?
 So you want to create a [Jekyll](https://jekyllrb.com/) static website and host it in [AWS](https://aws.amazon.com/) with SSL. Well, to make this all happen you need to configure the following [AWS](https://aws.amazon.com/) services: [Route53, S3](https://aws.amazon.com/route53/), [CloudFront](https://aws.amazon.com/cloudfront/), [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/), [Lambda](https://aws.amazon.com/lambda/). That's a bit overwhelming, just for a simple static website!
 
