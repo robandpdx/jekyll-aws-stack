@@ -1,0 +1,106 @@
+name: Stack initialization
+
+on:
+  workflow_dispatch:
+    inputs:
+      AWS_ACCESS_KEY_ID:
+        required: true
+        description: aws access key id
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+        description: aws secret access key
+      DOMAIN_NAME:
+        required: true
+        description: domain name of the website
+      HOST_NAME:
+        required: true
+        description: host name of website
+      HOSTED_ZONE_ID:
+        required: true
+        description: aws route53 hosted zone id
+
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: web
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+    - run: bundle install
+    - run: bundle exec jekyll build
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v3
+      with:
+        name: jekyll-site
+        path: web/_site/**/*
+        retention-days: 1
+  
+  build-sam:
+    runs-on: ubuntu-latest
+    environment: pdxcode
+    needs: build-web
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.7'
+    - uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Download web artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: site
+        path: web/_site
+    - name: Running sam build
+      run: sam build --use-container
+    - name: Archive build
+      uses: actions/upload-artifact@v3
+      with:
+        name: sam
+        path: .aws-sam
+        retention-days: 1
+
+  deploy-prod:
+    name: Deploy prod
+    runs-on: ubuntu-latest
+    needs: [ build-web, build-sam ]
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+    - uses: aws-actions/setup-sam@v2
+    - uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Download web artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: site
+        path: web/_site
+    - name: Download sam artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: sam
+        path: .aws-sam
+
+    # sam deploy
+    - run: sam deploy --no-confirm-changeset --parameter-overrides "DomainName=${{ inputs.DOMAIN_NAME }} HostName=${{ inputs.HOST_NAME }} HostedZoneId=${{ inputs.HOSTED_ZONE_ID }}"
