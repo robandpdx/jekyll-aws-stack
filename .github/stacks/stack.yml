@@ -38,6 +38,11 @@ configs:
       topics:
         - jekyll
         - aws
+      secrets:
+        - name: AWS_ACCESS_KEY_ID
+          value: ${{ inputs.AWS_ACCESS_KEY_ID }}
+        - name: AWS_SECRET_ACCESS_KEY
+          value: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
 
   branches:
     - name: main
@@ -54,10 +59,6 @@ configs:
       parameters:
         allowed-branch-rules:
           - main
-        secrets:
-          - name: AWS_ACCESS_KEY_ID
-            value: ${{ inputs.AWS_ACCESS_KEY_ID }}
-          - name: AWS_SECRET_ACCESS_KEY
-            value: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+        
 init:
   uses: stack-init.yaml
