@@ -47,7 +47,7 @@ jobs:
   
   build-sam:
     runs-on: ubuntu-latest
-    environment: pdxcode
+    environment: production
     needs: build-web
 
     steps:
@@ -81,6 +81,7 @@ jobs:
   deploy-prod:
     name: Deploy prod
     runs-on: ubuntu-latest
+    environment: production
     needs: [ build-web, build-sam ]
 
     steps:
