@@ -10,27 +10,35 @@ branding:
 inputs:
   - name: AWS_ACCESS_KEY_ID
     description: aws access key id
-    type: string
     is-secret: true
+    required: true
+
   - name: AWS_SECRET_ACCESS_KEY
     description: aws secret access key
-    type: string
     is-secret: true
+    required: true
+
   - name: DOMAIN_NAME
     description: domain name of the website
-    type: string
+    required: true
+
   - name: HOST_NAME
     default: www
     description: host name of website
-    type: string
+    required: true
+
   - name: HOSTED_ZONE_ID
     description: aws route53 hosted zone id
-    type: string
+    required: true
+
 configs:
   repo-metadata:
-    topics:
-      - jekyll
-      - aws
+    parameters:
+      description: 'Jekyll static website on AWS'
+      topics:
+        - jekyll
+        - aws
+
   branches:
     - name: main
       parameters:
